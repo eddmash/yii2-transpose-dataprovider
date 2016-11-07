@@ -277,7 +277,7 @@ class TransposeDataProvider extends ActiveDataProvider
         $rows = $query->select($this->groupField)->distinct()->asArray()->orderBy($this->groupField)->all($this->db);
 
         array_walk($rows, function (&$value, $key) {
-            $value = reset($value);
+            $value = $this->getCleanColumn(reset($value));
         });
 
         $this->_rows = $rows;
@@ -348,7 +348,7 @@ class TransposeDataProvider extends ActiveDataProvider
                     continue;
                 endif;
 
-                $dataRows[$rowID][$this->getCleanColumn($column)] = $model->{$this->valuesField};
+                $dataRows[$rowID][$column] = $model->{$this->valuesField};
             endforeach;
 
             foreach ($extraColumns as $eColumn => $label) :
@@ -415,7 +415,7 @@ class TransposeDataProvider extends ActiveDataProvider
      */
     public static function isValidVariableName($name)
     {
-        return preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/', $name);
+        return 1 === preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $name);
     }
 
     public static function conformColumn($name)
