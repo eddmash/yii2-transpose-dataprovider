@@ -114,6 +114,18 @@ class TransposeDataProvider extends ActiveDataProvider
     private $_rows;
 
     /**
+     * Callback to invoked to customize each record found on the data field.
+     * @var
+     */
+    private $prepareDataFieldValue;
+
+    /**
+     * Callback to invoked to return the column label each record found on the column field.
+     * @var
+     */
+    private $columnLabel;
+
+    /**
      * Initializes the DB connection component.
      * This method will initialize the [[db]] property to make sure it refers to a valid DB connection.
      *
@@ -341,14 +353,17 @@ class TransposeDataProvider extends ActiveDataProvider
                 if($this->getColumnValue($model) !== $column):
                     continue;
                 endif;
+
                 $dataRows[$rowID][$column] = $model->{$this->valuesField};
             endforeach;
 
             foreach ($extraColumns as $eColumn => $label) :
+
                 if(is_numeric($eColumn)):
                     $eColumn = $label;
                 endif;
-                $dataRows[$rowID][$label] = $this->getColumnValue($model, $eColumn);
+
+                $dataRows[$rowID][$this->getColumnLabel($model, $label)] = $this->getColumnValue($model, $eColumn);
             endforeach;
 
         endforeach;
@@ -384,4 +399,19 @@ class TransposeDataProvider extends ActiveDataProvider
         return $value;
     }
 
+    /**
+     * Creates the field label.
+     * @param $model
+     * @param $column
+     * @return mixed
+     * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
+     */
+    public function getColumnLabel($model, $column)
+    {
+        $label = $column;
+        if(is_callable($this->columnLabel)):
+            $label = call_user_func($this->columnLabel, $column, $model);
+        endif;
+        return $label;
+    } 
 }
