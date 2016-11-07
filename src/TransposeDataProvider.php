@@ -120,12 +120,6 @@ class TransposeDataProvider extends ActiveDataProvider
     private $prepareDataFieldValue;
 
     /**
-     * Callback to invoked to return the column label each record found on the column field.
-     * @var
-     */
-    private $columnLabel;
-
-    /**
      * Initializes the DB connection component.
      * This method will initialize the [[db]] property to make sure it refers to a valid DB connection.
      *
@@ -363,7 +357,7 @@ class TransposeDataProvider extends ActiveDataProvider
                     $eColumn = $label;
                 endif;
 
-                $dataRows[$rowID][$this->getColumnLabel($model, $label)] = $this->getColumnValue($model, $eColumn);
+                $dataRows[$rowID][$this->getColumnLabel($label)] = $this->getColumnValue($model, $eColumn);
             endforeach;
 
         endforeach;
@@ -406,12 +400,27 @@ class TransposeDataProvider extends ActiveDataProvider
      * @return mixed
      * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
      */
-    public function getColumnLabel($model, $column)
+    public function getColumnLabel($column)
     {
-        $label = $column;
-        if(is_callable($this->columnLabel)):
-            $label = call_user_func($this->columnLabel, $column, $model);
+        if(!self::isValidVariableName($column)):
+            $column = self::conformColumn($column);
         endif;
-        return $label;
-    } 
+        return $column;
+    }
+
+    /**
+     * Check if a string can be used as a php variable/ class attribute.
+     * @param $name
+     * @return mixed
+     * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
+     */
+    public static function isValidVariableName($name)
+    {
+        return preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/', $name);
+    }
+
+    public static function conformColumn($name)
+    {
+        return preg_replace('/[^\w]/', "_", $name);
+    }
 }
