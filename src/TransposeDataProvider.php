@@ -348,7 +348,7 @@ class TransposeDataProvider extends ActiveDataProvider
                     continue;
                 endif;
 
-                $dataRows[$rowID][$column] = $model->{$this->valuesField};
+                $dataRows[$rowID][$this->getCleanColumn($column)] = $model->{$this->valuesField};
             endforeach;
 
             foreach ($extraColumns as $eColumn => $label) :
@@ -357,7 +357,7 @@ class TransposeDataProvider extends ActiveDataProvider
                     $eColumn = $label;
                 endif;
 
-                $dataRows[$rowID][$this->getColumnLabel($label)] = $this->getColumnValue($model, $eColumn);
+                $dataRows[$rowID][$label] = $this->getColumnValue($model, $eColumn);
             endforeach;
 
         endforeach;
@@ -394,13 +394,12 @@ class TransposeDataProvider extends ActiveDataProvider
     }
 
     /**
-     * Creates the field label.
-     * @param $model
+     * Creates the field label. 
      * @param $column
      * @return mixed
      * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
      */
-    public function getColumnLabel($column)
+    public function getCleanColumn($column)
     {
         if(!self::isValidVariableName($column)):
             $column = self::conformColumn($column);
