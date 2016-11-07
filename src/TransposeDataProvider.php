@@ -35,14 +35,16 @@ use yii\db\QueryInterface;
  *
  * student | cre | ghc | physics
  * ------------------------------
- * mat     | 52  | 40  | 60
- * leon    | 70  | 80  | 10
+ *  mat    | 52  | 40  | 60
+ *  leon   | 70  | 80  | 10
  *
  * </pre>
  *
  * We achive this by doing :
  *
- * <pre>use Eddmash\TransposeDataProvider;
+ * <code>
+ *
+ * use Eddmash\TransposeDataProvider;
  *
  * $dataProvider = new TransposeDataProvider([
  *  'query'=>$dataQuery,
@@ -55,7 +57,7 @@ use yii\db\QueryInterface;
  *   ]
  * ]);
  *
- * </pre>
+ * </code>
  *
  *
  * By default the transposed output contains on the the columns found at {@see columnsField },
