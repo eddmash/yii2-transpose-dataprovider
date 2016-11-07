@@ -134,24 +134,23 @@ student | subject | grade
 <p>and we need our data to look as below :</p>
 <p></pre></p>
 <h2>student | cre | ghc | physics</h2>
-<p>mat     | 52  | 40  | 60
-leon    | 70  | 80  | 10</p>
+<p>mat    | 52  | 40  | 60
+leon   | 70  | 80  | 10</p>
 <p></pre></p>
 <p>We achive this by doing :</p>
-<pre>use Eddmash\TransposeDataProvider;
-
-$dataProvider = new TransposeDataProvider([
- 'query'=>$dataQuery,
- 'groupField'=>'rowid',
- 'columnsField'=>'columns.column_name',
- 'valuesField'=>'data',
- 'extraFields'=>['call_data_id', 'instance.name'],
- 'pagination'=>[
-     'pageSize'=>4
-  ]
-]);
-
-</pre>
+<p><code></p>
+<p>use Eddmash\TransposeDataProvider;</p>
+<p>$dataProvider = new TransposeDataProvider([
+'query'=&gt;$dataQuery,
+'groupField'=&gt;'rowid',
+'columnsField'=&gt;'columns.column_name',
+'valuesField'=&gt;'data',
+'extraFields'=&gt;['call_data_id', 'instance.name'],
+'pagination'=&gt;[
+'pageSize'=&gt;4
+]
+]);</p>
+<p></code></p>
 <p>By default the transposed output contains on the the columns found at \Eddmash\TransposeDataProvider\columnsField,
 to get other columns present on the query add them to \Eddmash\TransposeDataProvider\extraFields</p>
 <p>Class Transpose2DataProvider</p></div>
@@ -406,7 +405,7 @@ to the transposed data.</p></div></div></div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2016-11-07T13:34:03+03:00.<br></footer></div>
+            generated on 2016-11-07T13:41:54+03:00.<br></footer></div>
 </div>
 </body>
 </html>
