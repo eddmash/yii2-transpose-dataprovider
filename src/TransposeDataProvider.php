@@ -98,11 +98,26 @@ class TransposeDataProvider extends ActiveDataProvider
      * @var array
      */
     public $extraFields = [];
+
+    /**
+     * cache for columns.
+     *
+     * @var
+     */
     private $_columns;
+
+    /**
+     * cache for rows.
+     *
+     * @var
+     */
     private $_rows;
 
     /**
-     * {@inheritdoc}
+     * Initializes the DB connection component.
+     * This method will initialize the [[db]] property to make sure it refers to a valid DB connection.
+     *
+     * @throws InvalidConfigException if [[db]] is invalid
      */
     public function init()
     {
@@ -114,13 +129,13 @@ class TransposeDataProvider extends ActiveDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * Prepares the data models that will be made available in the current page.
      *
-     * Incase of pagination, we have to fetch the number of rows required. since we using a query that most of the
-     * time will consist of several joins in order to get the data and the columns.
+     * @return array the available data models
      *
-     * we will be using the where clause instead of the tradition offset/limit pair which work on a single table.
-     * to paginate we add the where $column between start and end clause on the $query
+     * @throws InvalidConfigException
+     *
+     * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
      */
     protected function prepareModels()
     {
@@ -153,7 +168,7 @@ class TransposeDataProvider extends ActiveDataProvider
             $query->addOrderBy($sort->getOrders());
         }
 
-        return $this->_transpose($query->all($this->db));
+        return $this->transpose($query->all($this->db));
     }
 
     /**
@@ -201,14 +216,6 @@ class TransposeDataProvider extends ActiveDataProvider
 
         // the offset is out of range use the last record in the array
         return $nextRow <= count($rows) ? $rows[$nextRow] : end($rows);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function prepareKeys($models)
-    {
-        return parent::prepareKeys($models);
     }
 
     /**
@@ -303,14 +310,6 @@ class TransposeDataProvider extends ActiveDataProvider
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function setSort($value)
-    {
-        parent::setSort($value);
-    }
-
-    /**
      * This transposes the models passed in it desired output.
      *
      * The desired output is dictated by :
@@ -324,7 +323,7 @@ class TransposeDataProvider extends ActiveDataProvider
      *
      * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
      */
-    protected function _transpose($models)
+    private function transpose($models)
     {
 
         $dataRows = [];
