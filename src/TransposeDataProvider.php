@@ -140,7 +140,7 @@ class TransposeDataProvider extends ActiveDataProvider
             // only do a between check if we have an upper range to work with.
             $upperRange = $this->getUpperRow($pagination, $rows);
 
-            if ($upperRange !== 0):
+            if ($upperRange):
                 $query->where(['between', $this->groupField,
                     $this->getLowerRow($pagination, $rows),
                     $upperRange,
@@ -329,9 +329,6 @@ class TransposeDataProvider extends ActiveDataProvider
 
         $dataRows = [];
 
-        $highestRow = 0;
-        $trackingHighest = true;
-
         $columns = $this->getDistinctColumns();
         $extraColumns = $this->extraFields;
         foreach ($models as $index => $model) :
@@ -357,7 +354,6 @@ class TransposeDataProvider extends ActiveDataProvider
 
         endforeach;
 
-//        $this->myEcho($dataRows);
         ksort($dataRows);
 
         return $dataRows;
