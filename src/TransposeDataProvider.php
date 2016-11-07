@@ -31,7 +31,7 @@ use yii\db\QueryInterface;
  *
  * and we need our data to look as below :
  *
- * </pre>
+ * <pre>
  *
  * student | cre | ghc | physics
  * ------------------------------
@@ -42,23 +42,21 @@ use yii\db\QueryInterface;
  *
  * We achive this by doing :
  *
- * <code>
+ * ``` php
  *
  * use Eddmash\TransposeDataProvider;
  *
  * $dataProvider = new TransposeDataProvider([
- *  'query'=>$dataQuery,
- *  'groupField'=>'rowid',
- *  'columnsField'=>'columns.column_name',
- *  'valuesField'=>'data',
- *  'extraFields'=>['call_data_id', 'instance.name'],
- *  'pagination'=>[
- *      'pageSize'=>4
- *   ]
+ *      'query' => $query,
+ *      'columnsField' => 'question_id',
+ *      'groupField' => 'pollid',
+ *      'valuesField' => 'response',
+ *      'pagination' => [
+ *          'pagesize' => $pageSize // in case you want a default pagesize
+ *      ]
  * ]);
  *
- * </code>
- *
+ * ```
  *
  * By default the transposed output contains on the the columns found at {@see columnsField },
  * to get other columns present on the query add them to {@see extraFields }
