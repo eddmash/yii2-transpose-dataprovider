@@ -1,0 +1,35 @@
+{
+
+  "name": "eddmash/yii2-transpose-dataprovider",
+  "keywords": [
+    "yii2",
+    "extension",
+    "dataprovider",
+    "transpose",
+    "eav"
+  ],
+  "description": "A Yii2 data provider that transpose data into a table format",
+  "homepage": "https://github.com/eddmash/yii2-transpose-dataprovider",
+  "license": "BSD-3-Clause",
+  "type": "yii2-extension",
+  "authors": [
+    {
+      "name": "EDDILBERT MACHARIA",
+      "email": "edd.cowan@gmail.com",
+      "homepage": "http://eddmash.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Eddmash\\TransposeDataProvider\\": ""
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  }
+}
