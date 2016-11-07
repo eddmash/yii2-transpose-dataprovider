@@ -12,4 +12,4 @@ cs_fixer*
 # # Jetbrains editors (PHPStorm, etc)
 #-------------------------
 .idea
-docs
+docs/raw
