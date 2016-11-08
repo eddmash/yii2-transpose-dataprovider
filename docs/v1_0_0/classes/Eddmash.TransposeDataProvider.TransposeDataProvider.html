@@ -33,7 +33,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">4</span></a></li>
+                <span class="label label-info">0</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
@@ -63,26 +63,29 @@
 <li class="nav-header">
 <i title="Methods" class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method_getColsNames" title="getColsNames() :: Returns all the columns that relate to the data we are handling, this also includes any extra fields
+<li class="method public "><a href="#method_getColumn" title="getColumn() :: Get a column in the query based on a columnLabel provided."><span class="description">Get a column in the query based on a columnLabel provided.</span><pre>getColumn()</pre></a></li>
+<li class="method public "><a href="#method_getDataColumns" title="getDataColumns() :: Returns all the columns that relate to the data we are handling, this also includes any extra fields
 that might have been passed."><span class="description">Returns all the columns that relate to the data we are handling, this also includes any extra fields
-that might have been passed.</span><pre>getColsNames()</pre></a></li>
-<li class="method public "><a href="#method_getColumnValue" title="getColumnValue() :: Gets a model and column name and returns the value of the column on the model."><span class="description">Gets a model and column name and returns the value of the column on the model.</span><pre>getColumnValue()</pre></a></li>
-<li class="method public "><a href="#method_getDistinctColumns" title="getDistinctColumns() :: gets the columns that will be used in our final transposed data."><span class="description">gets the columns that will be used in our final transposed data.</span><pre>getDistinctColumns()</pre></a></li>
-<li class="method public "><a href="#method_getDistinctRows" title="getDistinctRows() :: gets the rows of data that our data holds."><span class="description">gets the rows of data that our data holds.</span><pre>getDistinctRows()</pre></a></li>
+that might have been passed.</span><pre>getDataColumns()</pre></a></li>
 <li class="method public "><a href="#method_getLowerRow" title="getLowerRow() :: Gets the row from which to start our data fetch."><span class="description">Gets the row from which to start our data fetch.</span><pre>getLowerRow()</pre></a></li>
+<li class="method public "><a href="#method_getQueryColumns" title="getQueryColumns() :: Returns columns found in the query."><span class="description">Returns columns found in the query.</span><pre>getQueryColumns()</pre></a></li>
 <li class="method public "><a href="#method_getUpperRow" title="getUpperRow() :: Gets the row at which we stop fetching data."><span class="description">Gets the row at which we stop fetching data.</span><pre>getUpperRow()</pre></a></li>
-<li class="method public "><a href="#method_init" title="init() :: {@inheritdoc}"><span class="description">{@inheritdoc}</span><pre>init()</pre></a></li>
-<li class="method public "><a href="#method_setSort" title="setSort() :: {@inheritdoc}"><span class="description">{@inheritdoc}</span><pre>setSort()</pre></a></li>
+<li class="method public "><a href="#method_init" title="init() :: Initializes the DB connection component."><span class="description">Initializes the DB connection component.</span><pre>init()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header protected">» Protected
                     <ul>
-<li class="method protected "><a href="#method__transpose" title="_transpose() :: This transposes the models passed in it desired output."><span class="description">This transposes the models passed in it desired output.</span><pre>_transpose()</pre></a></li>
-<li class="method protected "><a href="#method_prepareKeys" title="prepareKeys() :: {@inheritdoc}"><span class="description">{@inheritdoc}</span><pre>prepareKeys()</pre></a></li>
-<li class="method protected "><a href="#method_prepareModels" title="prepareModels() :: {@inheritdoc}"><span class="description">{@inheritdoc}</span><pre>prepareModels()</pre></a></li>
+<li class="method protected "><a href="#method_conformColumn" title="conformColumn() :: ensures column to be a valid column name."><span class="description">ensures column to be a valid column name.</span><pre>conformColumn()</pre></a></li>
+<li class="method protected "><a href="#method_getCleanColumn" title="getCleanColumn() :: Creates the field label."><span class="description">Creates the field label.</span><pre>getCleanColumn()</pre></a></li>
+<li class="method protected "><a href="#method_getColumnValue" title="getColumnValue() :: Gets a model and column name and returns the value of the column on the model."><span class="description">Gets a model and column name and returns the value of the column on the model.</span><pre>getColumnValue()</pre></a></li>
+<li class="method protected "><a href="#method_getDistinctColumns" title="getDistinctColumns() :: gets the columns that will be used in our final transposed data."><span class="description">gets the columns that will be used in our final transposed data.</span><pre>getDistinctColumns()</pre></a></li>
+<li class="method protected "><a href="#method_getDistinctRows" title="getDistinctRows() :: gets the rows of data that our data holds."><span class="description">gets the rows of data that our data holds.</span><pre>getDistinctRows()</pre></a></li>
+<li class="method protected "><a href="#method_isValidVariableName" title="isValidVariableName() :: Check if a string can be used as a php variable/ class attribute."><span class="description">Check if a string can be used as a php variable/ class attribute.</span><pre>isValidVariableName()</pre></a></li>
+<li class="method protected "><a href="#method_prepareModels" title="prepareModels() :: Prepares the data models that will be made available in the current page."><span class="description">Prepares the data models that will be made available in the current page.</span><pre>prepareModels()</pre></a></li>
 <li class="method protected "><a href="#method_prepareTotalCount" title="prepareTotalCount() :: In this case we return the number of distinct rows based on the groupField
 {@inheritdoc}"><span class="description">In this case we return the number of distinct rows based on the groupField
 {@inheritdoc}</span><pre>prepareTotalCount()</pre></a></li>
+<li class="method protected "><a href="#method_transpose" title="transpose() :: This transposes the models passed in it desired output."><span class="description">This transposes the models passed in it desired output.</span><pre>transpose()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -91,13 +94,15 @@ that might have been passed.</span><pre>getColsNames()</pre></a></li>
 <li class="property public "><a href="#property_columnsField" title="$columnsField() :: The column in the columnQuery actually contains the records we need to use as column."><span class="description"></span><pre>$columnsField</pre></a></li>
 <li class="property public "><a href="#property_extraFields" title="$extraFields() :: Other columns found on the $this-&gt;query that should be added to the transposed output."><span class="description"></span><pre>$extraFields</pre></a></li>
 <li class="property public "><a href="#property_groupField" title="$groupField() :: This fields is used group together records in the $this-&gt;query into actual understandable rows of records."><span class="description"></span><pre>$groupField</pre></a></li>
+<li class="property public "><a href="#property_labelsField" title="$labelsField() :: The column to be used to get the labels for the column, use this incase the field used for $columnsField does
+not consist of user friendly labels."><span class="description"></span><pre>$labelsField</pre></a></li>
 <li class="property public "><a href="#property_valuesField" title="$valuesField() :: The column in the $this-&gt;query that actually contains the records we need to use as values for our columns."><span class="description"></span><pre>$valuesField</pre></a></li>
 </ul>
 </li>
 <li class="nav-header private">» Private
                     <ul>
-<li class="property private "><a href="#property__columns" title="$_columns() :: "><span class="description"></span><pre>$_columns</pre></a></li>
-<li class="property private "><a href="#property__rows" title="$_rows() :: "><span class="description"></span><pre>$_rows</pre></a></li>
+<li class="property private "><a href="#property__columns" title="$_columns() :: cache for columns."><span class="description"></span><pre>$_columns</pre></a></li>
+<li class="property private "><a href="#property__rows" title="$_rows() :: cache for rows."><span class="description"></span><pre>$_rows</pre></a></li>
 </ul>
 </li>
 </ul>
@@ -118,7 +123,7 @@ that might have been passed.</span><pre>getColsNames()</pre></a></li>
 <div xmlns:php="http://php.net/xsl" class="element class">
 <p class="short_description">Transposes data returned by a query.</p>
 <div class="details">
-<div class="long_description"><p>Assuming our query outputs the following  :</p>
+<div class="long_description"><p>Assuming you have a Query that outputs the following  :</p>
 <pre>
 
 student | subject | grade
@@ -132,28 +137,32 @@ student | subject | grade
 
 </pre>
 <p>and we need our data to look as below :</p>
-<p></pre></p>
-<h2>student | cre | ghc | physics</h2>
-<p>mat    | 52  | 40  | 60
-leon   | 70  | 80  | 10</p>
-<p></pre></p>
+<pre>
+
+student | cre | ghc | physics
+------------------------------
+ mat    | 52  | 40  | 60
+ leon   | 70  | 80  | 10
+
+</pre>
 <p>We achive this by doing :</p>
-<p><code></p>
-<p>use Eddmash\TransposeDataProvider;</p>
-<p>$dataProvider = new TransposeDataProvider([
-'query'=&gt;$dataQuery,
-'groupField'=&gt;'rowid',
-'columnsField'=&gt;'columns.column_name',
-'valuesField'=&gt;'data',
-'extraFields'=&gt;['call_data_id', 'instance.name'],
-'pagination'=&gt;[
-'pageSize'=&gt;4
-]
-]);</p>
-<p></code></p>
-<p>By default the transposed output contains on the the columns found at \Eddmash\TransposeDataProvider\columnsField,
-to get other columns present on the query add them to \Eddmash\TransposeDataProvider\extraFields</p>
-<p>Class Transpose2DataProvider</p></div>
+<pre><code class="language-php">
+use Eddmash\TransposeDataProvider;
+
+$dataProvider = new TransposeDataProvider([
+     'query' =&gt; $query,
+     'columnsField' =&gt; 'subject',
+     'groupField' =&gt; 'student',
+     'valuesField' =&gt; 'grade',
+     'pagination' =&gt; [
+         'pagesize' =&gt; $pageSize // in case you want a default pagesize
+     ]
+]);
+</code></pre>
+<p><strong> TransposeDataProvider::$columnsField</strong> By default the transposed output contains only the the
+columns found at
+on the query.</p>
+<p><strong>TransposeDataProvider::$extraFields</strong> to get other columns present on the query add them to</p></div>
 <table class="table table-bordered">
 <tr>
 <th>author</th>
@@ -166,24 +175,9 @@ to get other columns present on the query add them to \Eddmash\TransposeDataProv
 </table>
 <h3>
 <i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
-<a id="method_getColsNames"></a><div class="element clickable method public method_getColsNames " data-toggle="collapse" data-target=".method_getColsNames .collapse" title="public">
-<h2>Returns all the columns that relate to the data we are handling, this also includes any extra fields
-that might have been passed.</h2>
-<pre>getColsNames() : mixed</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<table class="table table-bordered"><tr>
-<th>author</th>
-<td><a href="mailto:edd.cowan@gmail.com">Eddilbert Macharia (http://eddmash.com)</a></td>
-</tr></table>
-<h3>Returns</h3>
-<div class="subelement response"><code>mixed</code></div>
-</div></div>
-</div>
-<a id="method_getColumnValue"></a><div class="element clickable method public method_getColumnValue " data-toggle="collapse" data-target=".method_getColumnValue .collapse" title="public">
-<h2>Gets a model and column name and returns the value of the column on the model.</h2>
-<pre>getColumnValue($model, null $column<code> = null</code>) : mixed</pre>
+<a id="method_getColumn"></a><div class="element clickable method public method_getColumn " data-toggle="collapse" data-target=".method_getColumn .collapse" title="public">
+<h2>Get a column in the query based on a columnLabel provided.</h2>
+<pre>getColumn($columnLabel) : null</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -192,46 +186,24 @@ that might have been passed.</h2>
 <td><a href="mailto:edd.cowan@gmail.com">Eddilbert Macharia (http://eddmash.com)</a></td>
 </tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$model</h4></div>
-<div class="subelement argument">
-<h4>$column</h4>
-<code>null</code>
+<div class="subelement argument"><h4>$columnLabel</h4></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>null</code></div>
+</div></div>
 </div>
+<a id="method_getDataColumns"></a><div class="element clickable method public method_getDataColumns " data-toggle="collapse" data-target=".method_getDataColumns .collapse" title="public">
+<h2>Returns all the columns that relate to the data we are handling, this also includes any extra fields
+that might have been passed.</h2>
+<pre>getDataColumns() : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>author</th>
+<td><a href="mailto:edd.cowan@gmail.com">Eddilbert Macharia (http://eddmash.com)</a></td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response"><code>mixed</code></div>
-</div></div>
-</div>
-<a id="method_getDistinctColumns"></a><div class="element clickable method public method_getDistinctColumns " data-toggle="collapse" data-target=".method_getDistinctColumns .collapse" title="public">
-<h2>gets the columns that will be used in our final transposed data.</h2>
-<pre>getDistinctColumns() : array | array&lt;mixed,\yii\db\ActiveRecord&gt;</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>we use {see @columnsField } to determine the rows.</p></div>
-<table class="table table-bordered"><tr>
-<th>author</th>
-<td><a href="mailto:edd.cowan@gmail.com">Eddilbert Macharia (http://eddmash.com)</a></td>
-</tr></table>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>array</code><code>array&lt;mixed,\yii\db\ActiveRecord&gt;</code>
-</div>
-</div></div>
-</div>
-<a id="method_getDistinctRows"></a><div class="element clickable method public method_getDistinctRows " data-toggle="collapse" data-target=".method_getDistinctRows .collapse" title="public">
-<h2>gets the rows of data that our data holds.</h2>
-<pre>getDistinctRows() : array | array&lt;mixed,\yii\db\ActiveRecord&gt;</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>Note, this will not be a direct mapping of the rows of data in a table.</p>
-<p>we use {see @groupField } to determine the rows.</p></div>
-<table class="table table-bordered"><tr>
-<th>author</th>
-<td><a href="mailto:edd.cowan@gmail.com">Eddilbert Macharia (http://eddmash.com)</a></td>
-</tr></table>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>array</code><code>array&lt;mixed,\yii\db\ActiveRecord&gt;</code>
-</div>
 </div></div>
 </div>
 <a id="method_getLowerRow"></a><div class="element clickable method public method_getLowerRow " data-toggle="collapse" data-target=".method_getLowerRow .collapse" title="public">
@@ -252,6 +224,20 @@ that might have been passed.</h2>
 <div class="subelement argument"><h4>$rows</h4></div>
 <h3>Returns</h3>
 <div class="subelement response"><code>integer</code></div>
+</div></div>
+</div>
+<a id="method_getQueryColumns"></a><div class="element clickable method public method_getQueryColumns " data-toggle="collapse" data-target=".method_getQueryColumns .collapse" title="public">
+<h2>Returns columns found in the query.</h2>
+<pre>getQueryColumns() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>author</th>
+<td><a href="mailto:edd.cowan@gmail.com">Eddilbert Macharia (http://eddmash.com)</a></td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
 </div></div>
 </div>
 <a id="method_getUpperRow"></a><div class="element clickable method public method_getUpperRow " data-toggle="collapse" data-target=".method_getUpperRow .collapse" title="public">
@@ -275,24 +261,149 @@ that might have been passed.</h2>
 </div></div>
 </div>
 <a id="method_init"></a><div class="element clickable method public method_init " data-toggle="collapse" data-target=".method_init .collapse" title="public">
-<h2>{@inheritdoc}</h2>
+<h2>Initializes the DB connection component.</h2>
 <pre>init() </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>This method will initialize the [[db]] property to make sure it refers to a valid DB connection.</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code>\yii\base\InvalidConfigException</code></th>
+<td>if [[db]] is invalid</td>
+</tr></table>
+</div></div>
 </div>
-<a id="method_setSort"></a><div class="element clickable method public method_setSort " data-toggle="collapse" data-target=".method_setSort .collapse" title="public">
-<h2>{@inheritdoc}</h2>
-<pre>setSort($value) </pre>
+<a id="method_conformColumn"></a><div class="element clickable method protected method_conformColumn " data-toggle="collapse" data-target=".method_conformColumn .collapse" title="protected">
+<h2>ensures column to be a valid column name.</h2>
+<pre>conformColumn($name) : mixed</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>author</th>
+<td><a href="mailto:edd.cowan@gmail.com">Eddilbert Macharia (http://eddmash.com)</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$name</h4></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed</code></div>
+</div></div>
+</div>
+<a id="method_getCleanColumn"></a><div class="element clickable method protected method_getCleanColumn " data-toggle="collapse" data-target=".method_getCleanColumn .collapse" title="protected">
+<h2>Creates the field label.</h2>
+<pre>getCleanColumn($column) : mixed</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>author</th>
+<td><a href="mailto:edd.cowan@gmail.com">Eddilbert Macharia (http://eddmash.com)</a></td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$value</h4></div>
+<div class="subelement argument"><h4>$column</h4></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed</code></div>
 </div></div>
 </div>
-<a id="method__transpose"></a><div class="element clickable method protected method__transpose " data-toggle="collapse" data-target=".method__transpose .collapse" title="protected">
+<a id="method_getColumnValue"></a><div class="element clickable method protected method_getColumnValue " data-toggle="collapse" data-target=".method_getColumnValue .collapse" title="protected">
+<h2>Gets a model and column name and returns the value of the column on the model.</h2>
+<pre>getColumnValue($model, null $column<code> = null</code>) : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>author</th>
+<td><a href="mailto:edd.cowan@gmail.com">Eddilbert Macharia (http://eddmash.com)</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$model</h4></div>
+<div class="subelement argument">
+<h4>$column</h4>
+<code>null</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed</code></div>
+</div></div>
+</div>
+<a id="method_getDistinctColumns"></a><div class="element clickable method protected method_getDistinctColumns " data-toggle="collapse" data-target=".method_getDistinctColumns .collapse" title="protected">
+<h2>gets the columns that will be used in our final transposed data.</h2>
+<pre>getDistinctColumns() : array | array&lt;mixed,\yii\db\ActiveRecord&gt;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>we use {see @columnsField } to determine the rows.</p></div>
+<table class="table table-bordered"><tr>
+<th>author</th>
+<td><a href="mailto:edd.cowan@gmail.com">Eddilbert Macharia (http://eddmash.com)</a></td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code><code>array&lt;mixed,\yii\db\ActiveRecord&gt;</code>
+</div>
+</div></div>
+</div>
+<a id="method_getDistinctRows"></a><div class="element clickable method protected method_getDistinctRows " data-toggle="collapse" data-target=".method_getDistinctRows .collapse" title="protected">
+<h2>gets the rows of data that our data holds.</h2>
+<pre>getDistinctRows() : array | array&lt;mixed,\yii\db\ActiveRecord&gt;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Note, this will not be a direct mapping of the rows of data in a table.</p>
+<p>we use {see @groupField } to determine the rows.</p></div>
+<table class="table table-bordered"><tr>
+<th>author</th>
+<td><a href="mailto:edd.cowan@gmail.com">Eddilbert Macharia (http://eddmash.com)</a></td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code><code>array&lt;mixed,\yii\db\ActiveRecord&gt;</code>
+</div>
+</div></div>
+</div>
+<a id="method_isValidVariableName"></a><div class="element clickable method protected method_isValidVariableName " data-toggle="collapse" data-target=".method_isValidVariableName .collapse" title="protected">
+<h2>Check if a string can be used as a php variable/ class attribute.</h2>
+<pre>isValidVariableName($name) : mixed</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>author</th>
+<td><a href="mailto:edd.cowan@gmail.com">Eddilbert Macharia (http://eddmash.com)</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$name</h4></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed</code></div>
+</div></div>
+</div>
+<a id="method_prepareModels"></a><div class="element clickable method protected method_prepareModels " data-toggle="collapse" data-target=".method_prepareModels .collapse" title="protected">
+<h2>Prepares the data models that will be made available in the current page.</h2>
+<pre>prepareModels() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>author</th>
+<td><a href="mailto:edd.cowan@gmail.com">Eddilbert Macharia (http://eddmash.com)</a></td>
+</tr></table>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code>\yii\base\InvalidConfigException</code></th>
+<td></td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>the available data models</div>
+</div></div>
+</div>
+<a id="method_prepareTotalCount"></a><div class="element clickable method protected method_prepareTotalCount " data-toggle="collapse" data-target=".method_prepareTotalCount .collapse" title="protected">
+<h2>In this case we return the number of distinct rows based on the groupField
+{@inheritdoc}</h2>
+<pre>prepareTotalCount() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_transpose"></a><div class="element clickable method protected method_transpose " data-toggle="collapse" data-target=".method_transpose .collapse" title="protected">
 <h2>This transposes the models passed in it desired output.</h2>
-<pre>_transpose($models) : array</pre>
+<pre>transpose($models) : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>The desired output is dictated by :
@@ -308,32 +419,6 @@ see @columnsField</p></div>
 <h3>Returns</h3>
 <div class="subelement response"><code>array</code></div>
 </div></div>
-</div>
-<a id="method_prepareKeys"></a><div class="element clickable method protected method_prepareKeys " data-toggle="collapse" data-target=".method_prepareKeys .collapse" title="protected">
-<h2>{@inheritdoc}</h2>
-<pre>prepareKeys($models) </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument"><h4>$models</h4></div>
-</div></div>
-</div>
-<a id="method_prepareModels"></a><div class="element clickable method protected method_prepareModels " data-toggle="collapse" data-target=".method_prepareModels .collapse" title="protected">
-<h2>{@inheritdoc}</h2>
-<pre>prepareModels() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"><p>Incase of pagination, we have to fetch the number of rows required. since we using a query that most of the
-time will consist of several joins in order to get the data and the columns.</p>
-<p>we will be using the where clause instead of the tradition offset/limit pair which work on a single table.
-to paginate we add the where $column between start and end clause on the $query</p></div></div></div>
-</div>
-<a id="method_prepareTotalCount"></a><div class="element clickable method protected method_prepareTotalCount " data-toggle="collapse" data-target=".method_prepareTotalCount .collapse" title="protected">
-<h2>In this case we return the number of distinct rows based on the groupField
-{@inheritdoc}</h2>
-<pre>prepareTotalCount() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <h3>
 <i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
@@ -368,6 +453,17 @@ to the transposed data.</p></div></div></div>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"><p>e.g. student in the example above.</p></div></div></div>
 </div>
+<a id="property_labelsField"> </a><div class="element clickable property public property_labelsField" data-toggle="collapse" data-target=".property_labelsField .collapse" title="public">
+<h2>The column to be used to get the labels for the column, use this incase the field used for $columnsField does
+not consist of user friendly labels.</h2>
+<pre>$labelsField : </pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 <a id="property_valuesField"> </a><div class="element clickable property public property_valuesField" data-toggle="collapse" data-target=".property_valuesField .collapse" title="public">
 <h2>The column in the $this-&gt;query that actually contains the records we need to use as values for our columns.</h2>
 <pre>$valuesField : </pre>
@@ -379,8 +475,8 @@ to the transposed data.</p></div></div></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property__columns"> </a><div class="element clickable property private property__columns" data-toggle="collapse" data-target=".property__columns .collapse" title="private">
-<h2>$_columns</h2>
-<pre>$_columns </pre>
+<h2>cache for columns.</h2>
+<pre>$_columns : </pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"></div>
@@ -389,8 +485,8 @@ to the transposed data.</p></div></div></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property__rows"> </a><div class="element clickable property private property__rows" data-toggle="collapse" data-target=".property__rows .collapse" title="private">
-<h2>$_rows</h2>
-<pre>$_rows </pre>
+<h2>cache for rows.</h2>
+<pre>$_rows : </pre>
 <div class="row collapse"><div class="detail-description">
 <h3>Default</h3>
 <div class="subelement argument"></div>
@@ -405,7 +501,7 @@ to the transposed data.</p></div></div></div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
-            generated on 2016-11-07T13:41:54+03:00.<br></footer></div>
+            generated on 2016-11-08T16:54:11+03:00.<br></footer></div>
 </div>
 </body>
 </html>

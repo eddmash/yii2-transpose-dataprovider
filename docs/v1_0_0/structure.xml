@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project title="TransposeDataProvider v1.0.0 Docs" version="2.8.5">
   <partials/>
-  <file path="TransposeDataProvider.php" generated-path="TransposeDataProvider.html" hash="6b1d651e22157f82e0d9c2c3073fc935" package="Default">
+  <file path="TransposeDataProvider.php" generated-path="TransposeDataProvider.html" hash="990d0c6eb4409c708107da32318e188f" package="Default">
     <docblock line="0">
       <description>Created by Eddilbert Macharia (edd.cowan@gmail.com)&lt;http://eddmash.com&gt;
 Date: 11/4/16.</description>
@@ -14,13 +14,13 @@ Date: 11/4/16.</description>
     <namespace-alias name="Pagination">\yii\data\Pagination</namespace-alias>
     <namespace-alias name="ActiveQuery">\yii\db\ActiveQuery</namespace-alias>
     <namespace-alias name="QueryInterface">\yii\db\QueryInterface</namespace-alias>
-    <class final="false" abstract="false" namespace="Eddmash\TransposeDataProvider" line="70" package="Default">
+    <class final="false" abstract="false" namespace="Eddmash\TransposeDataProvider" line="71" package="Default">
       <extends>\yii\data\ActiveDataProvider</extends>
       <name>TransposeDataProvider</name>
       <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider</full_name>
-      <docblock line="70">
+      <docblock line="71">
         <description>Transposes data returned by a query.</description>
-        <long-description>Assuming our query outputs the following  :
+        <long-description>Assuming you have a Query that outputs the following  :
 &lt;pre&gt;
 
 student | subject | grade
@@ -36,7 +36,7 @@ student | subject | grade
 
 and we need our data to look as below :
 
-&lt;/pre&gt;
+&lt;pre&gt;
 
 student | cre | ghc | physics
 ------------------------------
@@ -47,126 +47,145 @@ student | cre | ghc | physics
 
 We achive this by doing :
 
-&lt;code&gt;
+``` php
 
 use Eddmash\TransposeDataProvider;
 
 $dataProvider = new TransposeDataProvider([
- 'query'=&gt;$dataQuery,
- 'groupField'=&gt;'rowid',
- 'columnsField'=&gt;'columns.column_name',
- 'valuesField'=&gt;'data',
- 'extraFields'=&gt;['call_data_id', 'instance.name'],
- 'pagination'=&gt;[
-     'pageSize'=&gt;4
-  ]
+     'query' =&gt; $query,
+     'columnsField' =&gt; 'subject',
+     'groupField' =&gt; 'student',
+     'valuesField' =&gt; 'grade',
+     'pagination' =&gt; [
+         'pagesize' =&gt; $pageSize // in case you want a default pagesize
+     ]
 ]);
 
-&lt;/code&gt;
+```
 
 
-By default the transposed output contains on the the columns found at \Eddmash\TransposeDataProvider\columnsField,
-to get other columns present on the query add them to \Eddmash\TransposeDataProvider\extraFields
+&lt;strong&gt; TransposeDataProvider::$columnsField&lt;/strong&gt; By default the transposed output contains only the the
+columns found at
+on the query.
 
-Class Transpose2DataProvider</long-description>
-        <tag name="author" line="70" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
-        <tag name="package" line="70" description="Default"/>
+&lt;strong&gt;TransposeDataProvider::$extraFields&lt;/strong&gt; to get other columns present on the query add them to</long-description>
+        <tag name="author" line="71" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
+        <tag name="package" line="71" description="Default"/>
       </docblock>
-      <property static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="78" package="Default">
+      <property static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="79" package="Default">
         <name>$groupField</name>
         <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::groupField</full_name>
         <default></default>
-        <docblock line="78">
+        <docblock line="79">
           <description>This fields is used group together records in the $this-&gt;query into actual understandable rows of records.</description>
           <long-description>e.g. student in the example above.</long-description>
-          <tag name="var" line="78" description="" type="" variable=""/>
+          <tag name="var" line="79" description="" type="" variable=""/>
         </docblock>
       </property>
-      <property static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="85" package="Default">
+      <property static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="86" package="Default">
         <name>$columnsField</name>
         <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::columnsField</full_name>
         <default></default>
-        <docblock line="85">
+        <docblock line="86">
           <description>The column in the columnQuery actually contains the records we need to use as column.</description>
           <long-description></long-description>
-          <tag name="var" line="85" description="" type="" variable=""/>
+          <tag name="var" line="86" description="" type="" variable=""/>
         </docblock>
       </property>
-      <property static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="92" package="Default">
+      <property static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="93" package="Default">
         <name>$valuesField</name>
         <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::valuesField</full_name>
         <default></default>
-        <docblock line="92">
+        <docblock line="93">
           <description>The column in the $this-&gt;query that actually contains the records we need to use as values for our columns.</description>
           <long-description></long-description>
-          <tag name="var" line="92" description="" type="" variable=""/>
+          <tag name="var" line="93" description="" type="" variable=""/>
         </docblock>
       </property>
-      <property static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="102" package="Default">
+      <property static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="103" package="Default">
         <name>$extraFields</name>
         <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::extraFields</full_name>
         <default>array()</default>
-        <docblock line="102">
+        <docblock line="103">
           <description>Other columns found on the $this-&gt;query that should be added to the transposed output.</description>
           <long-description>For relational fields use the dot notation,  [student.role.name] this will add the role name of each student
 to the transposed data.</long-description>
-          <tag name="var" line="102" description="" type="array" variable="">
+          <tag name="var" line="103" description="" type="array" variable="">
             <type>array</type>
           </tag>
         </docblock>
       </property>
-      <property static="false" visibility="private" namespace="Eddmash\TransposeDataProvider" line="103" package="Default">
+      <property static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="110" package="Default">
+        <name>$labelsField</name>
+        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::labelsField</full_name>
+        <default></default>
+        <docblock line="110">
+          <description>The column to be used to get the labels for the column, use this incase the field used for $columnsField does
+not consist of user friendly labels.</description>
+          <long-description></long-description>
+          <tag name="var" line="110" description="" type="" variable=""/>
+        </docblock>
+      </property>
+      <property static="false" visibility="private" namespace="Eddmash\TransposeDataProvider" line="117" package="Default">
         <name>$_columns</name>
         <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::_columns</full_name>
         <default></default>
-        <docblock line="103">
-          <description></description>
+        <docblock line="117">
+          <description>cache for columns.</description>
           <long-description></long-description>
+          <tag name="var" line="117" description="" type="" variable=""/>
         </docblock>
       </property>
-      <property static="false" visibility="private" namespace="Eddmash\TransposeDataProvider" line="104" package="Default">
+      <property static="false" visibility="private" namespace="Eddmash\TransposeDataProvider" line="124" package="Default">
         <name>$_rows</name>
         <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::_rows</full_name>
         <default></default>
-        <docblock line="104">
-          <description></description>
+        <docblock line="124">
+          <description>cache for rows.</description>
           <long-description></long-description>
+          <tag name="var" line="124" description="" type="" variable=""/>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="109" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="132" package="Default">
         <name>init</name>
         <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::init()</full_name>
-        <docblock line="109">
-          <description>{@inheritdoc}</description>
-          <long-description></long-description>
+        <docblock line="132">
+          <description>Initializes the DB connection component.</description>
+          <long-description>This method will initialize the [[db]] property to make sure it refers to a valid DB connection.</long-description>
+          <tag name="throws" line="132" description="if [[db]] is invalid" type="\yii\base\InvalidConfigException">
+            <type>\yii\base\InvalidConfigException</type>
+          </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Eddmash\TransposeDataProvider" line="127" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Eddmash\TransposeDataProvider" line="150" package="Default">
         <name>prepareModels</name>
         <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::prepareModels()</full_name>
-        <docblock line="127">
-          <description>{@inheritdoc}</description>
-          <long-description>Incase of pagination, we have to fetch the number of rows required. since we using a query that most of the
-time will consist of several joins in order to get the data and the columns.
-
-we will be using the where clause instead of the tradition offset/limit pair which work on a single table.
-to paginate we add the where $column between start and end clause on the $query</long-description>
+        <docblock line="150">
+          <description>Prepares the data models that will be made available in the current page.</description>
+          <long-description></long-description>
+          <tag name="return" line="150" description="the available data models" type="array">
+            <type>array</type>
+          </tag>
+          <tag name="throws" line="150" description="" type="\yii\base\InvalidConfigException">
+            <type>\yii\base\InvalidConfigException</type>
+          </tag>
+          <tag name="author" line="150" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="171" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="194" package="Default">
         <name>getLowerRow</name>
         <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::getLowerRow()</full_name>
-        <docblock line="171">
+        <docblock line="194">
           <description>Gets the row from which to start our data fetch.</description>
           <long-description></long-description>
-          <tag name="param" line="171" description="" type="\yii\data\Pagination" variable="$pagination">
+          <tag name="param" line="194" description="" type="\yii\data\Pagination" variable="$pagination">
             <type>\yii\data\Pagination</type>
           </tag>
-          <tag name="param" line="171" description="" type="" variable="$rows"/>
-          <tag name="return" line="171" description="" type="integer">
+          <tag name="param" line="194" description="" type="" variable="$rows"/>
+          <tag name="return" line="194" description="" type="integer">
             <type>integer</type>
           </tag>
-          <tag name="author" line="171" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
+          <tag name="author" line="194" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$pagination</name>
@@ -179,20 +198,20 @@ to paginate we add the where $column between start and end clause on the $query<
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="192" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="215" package="Default">
         <name>getUpperRow</name>
         <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::getUpperRow()</full_name>
-        <docblock line="192">
+        <docblock line="215">
           <description>Gets the row at which we stop fetching data.</description>
           <long-description></long-description>
-          <tag name="param" line="192" description="" type="\yii\data\Pagination" variable="$pagination">
+          <tag name="param" line="215" description="" type="\yii\data\Pagination" variable="$pagination">
             <type>\yii\data\Pagination</type>
           </tag>
-          <tag name="param" line="192" description="" type="" variable="$rows"/>
-          <tag name="return" line="192" description="" type="integer">
+          <tag name="param" line="215" description="" type="" variable="$rows"/>
+          <tag name="return" line="215" description="" type="integer">
             <type>integer</type>
           </tag>
-          <tag name="author" line="192" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
+          <tag name="author" line="215" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$pagination</name>
@@ -205,96 +224,100 @@ to paginate we add the where $column between start and end clause on the $query<
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Eddmash\TransposeDataProvider" line="211" package="Default">
-        <name>prepareKeys</name>
-        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::prepareKeys()</full_name>
-        <docblock line="211">
-          <description>{@inheritdoc}</description>
-          <long-description></long-description>
-        </docblock>
-        <argument line="0" by_reference="false">
-          <name>$models</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Eddmash\TransposeDataProvider" line="220" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Eddmash\TransposeDataProvider" line="235" package="Default">
         <name>prepareTotalCount</name>
         <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::prepareTotalCount()</full_name>
-        <docblock line="220">
+        <docblock line="235">
           <description>In this case we return the number of distinct rows based on the groupField
 {@inheritdoc}</description>
           <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="240" package="Default">
-        <name>getColsNames</name>
-        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::getColsNames()</full_name>
-        <docblock line="240">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="255" package="Default">
+        <name>getDataColumns</name>
+        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::getDataColumns()</full_name>
+        <docblock line="255">
           <description>Returns all the columns that relate to the data we are handling, this also includes any extra fields
 that might have been passed.</description>
           <long-description></long-description>
-          <tag name="return" line="240" description="" type="mixed">
+          <tag name="return" line="255" description="" type="mixed">
             <type>mixed</type>
           </tag>
-          <tag name="author" line="240" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
+          <tag name="author" line="255" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="256" package="Default">
-        <name>getDistinctRows</name>
-        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::getDistinctRows()</full_name>
-        <docblock line="256">
-          <description>gets the rows of data that our data holds.</description>
-          <long-description>Note, this will not be a direct mapping of the rows of data in a table.
-
-we use {see @groupField } to determine the rows.</long-description>
-          <tag name="return" line="256" description="" type="array|array&lt;mixed,\yii\db\ActiveRecord&gt;">
-            <type>array</type>
-            <type>array&lt;mixed,\yii\db\ActiveRecord&gt;</type>
-          </tag>
-          <tag name="author" line="256" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
-        </docblock>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="286" package="Default">
-        <name>getDistinctColumns</name>
-        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::getDistinctColumns()</full_name>
-        <docblock line="286">
-          <description>gets the columns that will be used in our final transposed data.</description>
-          <long-description>we use {see @columnsField } to determine the rows.</long-description>
-          <tag name="return" line="286" description="" type="array|array&lt;mixed,\yii\db\ActiveRecord&gt;">
-            <type>array</type>
-            <type>array&lt;mixed,\yii\db\ActiveRecord&gt;</type>
-          </tag>
-          <tag name="author" line="286" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
-        </docblock>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="310" package="Default">
-        <name>setSort</name>
-        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::setSort()</full_name>
-        <docblock line="310">
-          <description>{@inheritdoc}</description>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="269" package="Default">
+        <name>getQueryColumns</name>
+        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::getQueryColumns()</full_name>
+        <docblock line="269">
+          <description>Returns columns found in the query.</description>
           <long-description></long-description>
+          <tag name="return" line="269" description="" type="array">
+            <type>array</type>
+          </tag>
+          <tag name="author" line="269" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="287" package="Default">
+        <name>getColumn</name>
+        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::getColumn()</full_name>
+        <docblock line="287">
+          <description>Get a column in the query based on a columnLabel provided.</description>
+          <long-description></long-description>
+          <tag name="param" line="287" description="" type="" variable="$columnLabel"/>
+          <tag name="return" line="287" description="" type="null">
+            <type>null</type>
+          </tag>
+          <tag name="author" line="287" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
         </docblock>
         <argument line="0" by_reference="false">
-          <name>$value</name>
+          <name>$columnLabel</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" namespace="Eddmash\TransposeDataProvider" line="329" package="Default">
-        <name>_transpose</name>
-        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::_transpose()</full_name>
-        <docblock line="329">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Eddmash\TransposeDataProvider" line="313" package="Default">
+        <name>getDistinctRows</name>
+        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::getDistinctRows()</full_name>
+        <docblock line="313">
+          <description>gets the rows of data that our data holds.</description>
+          <long-description>Note, this will not be a direct mapping of the rows of data in a table.
+
+we use {see @groupField } to determine the rows.</long-description>
+          <tag name="return" line="313" description="" type="array|array&lt;mixed,\yii\db\ActiveRecord&gt;">
+            <type>array</type>
+            <type>array&lt;mixed,\yii\db\ActiveRecord&gt;</type>
+          </tag>
+          <tag name="author" line="313" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Eddmash\TransposeDataProvider" line="343" package="Default">
+        <name>getDistinctColumns</name>
+        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::getDistinctColumns()</full_name>
+        <docblock line="343">
+          <description>gets the columns that will be used in our final transposed data.</description>
+          <long-description>we use {see @columnsField } to determine the rows.</long-description>
+          <tag name="return" line="343" description="" type="array|array&lt;mixed,\yii\db\ActiveRecord&gt;">
+            <type>array</type>
+            <type>array&lt;mixed,\yii\db\ActiveRecord&gt;</type>
+          </tag>
+          <tag name="author" line="343" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Eddmash\TransposeDataProvider" line="409" package="Default">
+        <name>transpose</name>
+        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::transpose()</full_name>
+        <docblock line="409">
           <description>This transposes the models passed in it desired output.</description>
           <long-description>The desired output is dictated by :
 see @groupField
 see @valuesField
 see @columnsField</long-description>
-          <tag name="param" line="329" description="" type="" variable="$models"/>
-          <tag name="return" line="329" description="" type="array">
+          <tag name="param" line="409" description="" type="" variable="$models"/>
+          <tag name="return" line="409" description="" type="array">
             <type>array</type>
           </tag>
-          <tag name="author" line="329" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
+          <tag name="author" line="409" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$models</name>
@@ -302,20 +325,20 @@ see @columnsField</long-description>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Eddmash\TransposeDataProvider" line="374" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Eddmash\TransposeDataProvider" line="464" package="Default">
         <name>getColumnValue</name>
         <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::getColumnValue()</full_name>
-        <docblock line="374">
+        <docblock line="464">
           <description>Gets a model and column name and returns the value of the column on the model.</description>
           <long-description></long-description>
-          <tag name="param" line="374" description="" type="" variable="$model"/>
-          <tag name="param" line="374" description="" type="null" variable="$column">
+          <tag name="param" line="464" description="" type="" variable="$model"/>
+          <tag name="param" line="464" description="" type="null" variable="$column">
             <type>null</type>
           </tag>
-          <tag name="return" line="374" description="" type="mixed">
+          <tag name="return" line="464" description="" type="mixed">
             <type>mixed</type>
           </tag>
-          <tag name="author" line="374" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
+          <tag name="author" line="464" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
         </docblock>
         <argument line="0" by_reference="false">
           <name>$model</name>
@@ -328,14 +351,62 @@ see @columnsField</long-description>
           <type>null</type>
         </argument>
       </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Eddmash\TransposeDataProvider" line="484" package="Default">
+        <name>getCleanColumn</name>
+        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::getCleanColumn()</full_name>
+        <docblock line="484">
+          <description>Creates the field label.</description>
+          <long-description></long-description>
+          <tag name="param" line="484" description="" type="" variable="$column"/>
+          <tag name="return" line="484" description="" type="mixed">
+            <type>mixed</type>
+          </tag>
+          <tag name="author" line="484" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$column</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="Eddmash\TransposeDataProvider" line="498" package="Default">
+        <name>isValidVariableName</name>
+        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::isValidVariableName()</full_name>
+        <docblock line="498">
+          <description>Check if a string can be used as a php variable/ class attribute.</description>
+          <long-description></long-description>
+          <tag name="param" line="498" description="" type="" variable="$name"/>
+          <tag name="return" line="498" description="" type="mixed">
+            <type>mixed</type>
+          </tag>
+          <tag name="author" line="498" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="Eddmash\TransposeDataProvider" line="509" package="Default">
+        <name>conformColumn</name>
+        <full_name>\Eddmash\TransposeDataProvider\TransposeDataProvider::conformColumn()</full_name>
+        <docblock line="509">
+          <description>ensures column to be a valid column name.</description>
+          <long-description></long-description>
+          <tag name="param" line="509" description="" type="" variable="$name"/>
+          <tag name="return" line="509" description="" type="mixed">
+            <type>mixed</type>
+          </tag>
+          <tag name="author" line="509" description="Eddilbert Macharia (http://eddmash.com)" link="mailto:edd.cowan@gmail.com"/>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
     </class>
-    <parse_markers>
-      <error line="211" code="PPC:ERR-50015">Argument $models is missing from the Docblock of prepareKeys</error>
-      <error line="310" code="PPC:ERR-50015">Argument $value is missing from the Docblock of setSort</error>
-      <error line="103" code="PPC:ERR-50007">No summary for property $_columns</error>
-      <error line="104" code="PPC:ERR-50007">No summary for property $_rows</error>
-    </parse_markers>
-    <source>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</source>
+    <source>eJzdW+tz2zYS/+6/As1oTlIqW3anjzvH9iV12pvM9JFLe72Zk9UUIiEJNUXy+LDspP7fb3cBkAAIyk4uybWnDylNLBaLfeG3C/bkr/k635s+fLjHHrLzQvBKxGxxw76KY5ksRFGxb3m05oXkbCTi+CDKtjx9vNpwmcDzZnyyrqr8eDqFsQ0v1/juDFk9BUbH7Oho+un06PMDeDPdS/lGlDmPBDJH4osfC56WeVYKoObPi+xKxqJ4tLdXl4LdSHmx4KW4eJZe8UTG51m6lKuvriORVzJLHwWJnvOCbwI0MfC/eBJV8spbyiF4zlcy5d7MhZ7391oUN857evMsrUSxhE2B2FqLza5KhmxZIaq6SJVaOfs3zkKFIOmTsqw3Ml2xm6xma34lgIDYsmrNK5bVVV5XJfwh2DJLkmyLtOwYp57khTjTbMqqjkVasd9YWS9+FRE+rQoeCxzc7/3hKNvAOvD7jUWFYOrps0/ckdU60iOfHroj+fqmlFEJT5+rkURkqcftC2+k5fZnb6TldnSod3YytbbJ05htBUsF6DKrC6XdKmNJll0yXrKFAA2RdvoVhHIpGZr1diupq6jPPlGqYIFtf3GoNsZ6N/FPsHG0BocCq8oSfSLO0KpG7F9++YVhSKq/0N3uiBZFOIitl+wUlLRlwQmjGUmMvyH54pCdnrEBPU7aoShL6k1afi1FEhPFULvW0CJaFVmd2yRKzTYJhGUtbDbklzZF3kQdEbTimVFRyldCSYl//QB/semUyZRFHKMRQgdyUgWhE4slr5OKmUkNqzk+zcePWh2rJ7JOWRVZujoLq+v4eGCr4mRqqL+8aZbD8KzM5FhHLYuytOIyLVmWJjeKZk0SaX4Q0TU4NK/wHbgPUjjJwQjWJ5e4hkVJqrIVC8JhJSBzALeiWQncr0T3t1dhPI7xrw1MaZXxmNfVOiuC6b+b6cfsJHAmnFG2jxJelmGdMpBcpHHJuhl57/Ue2osyKf4gm2KULGmXDJ5q1DD5HcgNO8VtFiLKChxW2xtgYO2fqV3KFDTCo6rmCQN1i6KsII3wRSJYkW3BOEsz/cCsKA5WB03G0DzFNd/kMIcvsithKM2Ex1e80M9T+m9eLxIZsUEbH3A6dPYltH3MGuovlf6VxOA3jRchhdmoSYKwNUwQkPrU3HsLZrv0fURzVEpH05sKqPIA+HxBqVsLcG+BrTTSlfd7x9lVWGV9gpfrrE7gLBYYAErEYPz6on2doaMllKjAl7RH4u5wepxVLM0qGp0wNtPuc1BkiThA4DNX6X4rk8REHsNBhoPohQLizHidWbMrG2b5kNIYLwp+E1SdlSbgXJjNu/qzDQ5LgmooynQqQQkSDmersl7rqRO9e4mRR6mYcAqupBggueNqoCZRmlVBXeg8pSwr3D/MKNiykJAYwKvUggd3+oWi6/GLCFQqSIp7u1shrwC4ssFLPWMXU8wfb8ARybvsnqWykgBdXwkVQU+/RKWkcNCCJ8HjJs9SdCQnHW4g72WxcibZMKD5s1m8mM9h2SyH7H2DRtzwSwHAEICPrMCFl5AD8TVnBJndFTv7qdaUJsMgnMmlWZCcgGhCdlrWqdoQSjsa05DK9ETEC9ji8bEa1DrCH7AffSTLl+TcIx3Llj+PxxYX/JG0hH2CBcFo+CPl8jYgrGyQqhgaIkrQv9s99a9vtOeFQJmVxQiFbrIYA4QyDJkFOG4A6DB+BaciHTcmy9cF7pYwSkfbqlRQghB1O91a5o1s5BO/mwPe8fCsAufBeDdWzpV+viVpO+Ymq3qHNJ7KkYA04BZVd9rX26wy8APi+qANgk0NOUbZ2CyFKYczBVLQakN24KyEvyGTeOhvwFzK1K5wCijYxSADxUqgBahMnEV54LpT8wjOpPK2At7MqjGNXvGnR09BUEgDzmn2yCPaP4OTVxRfNnHSgg8/pEaDFnMDb0MvqrYAHkFofXR6ypY8KTtWsKbvn1Vw6iXncOZWDqsfm9cjSwM0m5zVpn0KRwCcINULGHDinzQ1VQA6xoy1ENVWCMiLaxFd4l4AaKiyOWV1niMW5OlKYHrbZsUlhGK1du06ILIXRGXL8A96nW1t3UyUrL5EqEKLzfi44zjGIlvAJWI0G2qxhxPWsc2kM5kYNHJ9k2175eqZ24rWJZh7xoDTVi6t/d36nlJmhWvYH+DFbu/QmweU873xSORCs+kNGDkcFTr96cUa2DNqWCaJ8e54YXh00/PfhI5XTBbLItuw7VoCugKvgOAvqrZ5sBRVtO5k4RwPDdYGg+3wHhEZoieLywbIvcfk652vtseEN2Ccx0vKg2y5LAWZ2o5uNBkN2FFMAaDpT07ZoRcBevuH7QTfyyCm0TyaBUAHgNxUiVFYGkwNGbTSFYU5PC2U2y4kUwMQFEOzQ/ZX9TDT7+fsGCUZmaC+h/PgaU6uA3mmrLJcOQy2a4JA/I/tOE0KfCPHIWfwXOYbuUEk93bOMUgBoIEYAVc0fD/e4aS2kykcpWIeTPlKFNkEwDNP0YJUHtJZpMgItrm0Nq8tFoy/IpBQVZDq3RUirqOGm5EcBo6aufv75v17i4BmYVB4RGeuHwGa4H4h8CxV+6OabivMKrh8Wm/A/VDSWB/aqo2CTfim6G5PN8Px9WOZwlkoqziLbu+JHm0E8UdAkB5YDAPK/xpBNg70DgCk70YjSDxjc9aWIgG7BMAknL3a9KPxLtC5f6ZccfiwxT1wavc53QuSAYIRorDtMWjVUuNFmH4IHd0YjwWivzROIAAnymUBkGTYjUjqGMoznt6oak+3a8xaxHMjV+tKoccFYsoc1R33lWQbeS1if+xDZGXsjp4rXXTiwDRXHIBGPtDMcE9tnRz0tDE7Pe3N0IOmA2IGdKL26CghvdyIYiVGrFuiT5rF7jK827+TbkPcNYbd7PowVnCVGjBD+a0ApwxVNZYpnBnf4XWo7siZ93C0UB9w1LLkJVHj85i5lmq4zObAh/K6oXSsprl2A75hsAMMYY5zesEqozQJ3wx/g504TJjYx49bk2m4YxH51kzrJPmgxlQWGdky9UQWXqSBdI9cU99l5rA1jSXRip16ssWwllATRR8qMBvx8GZHRbRX2eFvAetfBgu++3oHLNLnGysLKNM9irqOVffWur5aZ0nc6ZF+Byf+xGqHYyMYj1aAFAXeXW94niOkApYd9hIdrsKGmM91q2DT61II9rg9htgtnhqxgBN3I1PRcNzZevvtwrn6f0EIbDZ//+m/C4Y67RHtqC7+Vt5ILeaebG5R7KjL3iWoaPo8bwYoePmEAuEObOG2Aqxl1Xm05cmlQrmTVpejP6l7JIirS3HT6VvQmBPb5wnUCjpb6EAjIqd94eR1S83Iyer57zTGjuhycJBpLdP1CsQCBtpS4n3UHXdETnQ4VzL/P/HRdzzbEWLAyM4g6UM+7zROXKKdoNq2lx0hIFFok9admLfPnpCcBdZpILvFbR6IO5v9W4ceyQbjbvCRND/hrFEzWY2WVSHzF/oyNqglv2dLK9BW7ruGrcUQM5MtZvg0YaDK5fFxBMVkVmwMwCAe47mrpVsbnCWleGsThczxO7bHXRrEfwOq6u8TudF6d7p1wrqbcX/ATVgpV93M65KTOjEaAJuvAFT1jvfWdM2vEE2hqxm6+PcTosTCH7J1GBzvKjnfSzJVN9ONT3hWVEKF230ZqhvoYUJWGtIJGx4MEa12ihQFVct6AVNaamLzMTsa31Vi3gFE6Uq8aj+6RBvp+1hV06PhZAWHXAkAs+/7Dmz7uBTYlotlVJlPYo8NqQcxndfWhyrOezsafLfQXhC+3A2UvB/0gLVuYZSAnVIJ8cYLlbWar0ssy9+7XFJfqpz7k6xmgsW8ra20qbG6kmksrulDQXoZrrS8zwksVBkqtCClPHuKwhDH/bPXnWmzw/ktO2DDIfyzg+pofutVYp3cf88FfT5eXnS1Y2ygi0+MaBZYFYacYhLpAqfedNp8EqSyt67R1AwFKHWWJPEnqHKJJV0VrXVomg8g7KTnLoHfR8EkSL1NIdnelnjm7Dmf9Oqho4huLqlg7uoBf/hBm0xr0T2xQpom7ZkImCnrzWemF4NqnAeMaWWJ27CaUQeNirGPqb7oVN1M8zkT1QRtB7MQABrKyhwa1q/1ByfG0CnEuc7PZxogdaLGVjdET1pvRCGjkZkZCptGMw13zbyr1F2KDStXcZr3gxNjfCNg0JJN26PvvYM8uk2SS7zTHjXSjQO4w4ztvGrUH/XQx+028MC/DZjoiTdz30IMei4jlTK8l9jT8lDHLvDxoQu6oDGdhpx/BkHA0EVAC84AvOoocaALAJAQYnEcTn2ORh8vNaE788HL4YQFeXkIdhCtZRKfU3b1WYTme3iIWAT6EraCLHEn7Xq7i4yGpdqcFmHeX/Eal6aJff6s/veh0voMlCK1pxf8weFu0NWsDs8OxPuRKu9k+RNeGf6EciwSga3zZpbvRS3sDVWGkZ+Z3gr5npvPoDiB93TFIp42/SGOySVf55A6lLxTfVvJKyBe1JXoWAYzz//MLiV+Pm1/KxrSNkroW0gLekTXWXkhVi8Jb4yG059nfP/Vk/1/vby4/mK5f3G9XM71m8P9v1gvHw6meElJzPuULVL8hrZ0P5Q2H9Famfv3rVTPD3eokxRZiDzhkQBVzn6+2M5RSw9ePvBVdbv3H7WcijU=</source>
   </file>
   <package name="Default" full_name="Default"/>
   <package name="global" full_name="global"/>
