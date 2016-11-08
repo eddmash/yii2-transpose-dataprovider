@@ -263,7 +263,7 @@ class TransposeDataProvider extends ActiveDataProvider
      * @return array
      * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
      */
-    protected function getQueryColumns()
+    public function getQueryColumns()
     {
         $colsMeta = $this->getDistinctColumns();
 
