@@ -15,7 +15,7 @@ use yii\db\QueryInterface;
 /**
  * Transposes data returned by a query.
  *
- * Assuming our query outputs the following  :
+ * Assuming you have a Query that outputs the following  :
  * <pre>
  *
  * student | subject | grade
@@ -48,9 +48,9 @@ use yii\db\QueryInterface;
  *
  * $dataProvider = new TransposeDataProvider([
  *      'query' => $query,
- *      'columnsField' => 'question_id',
- *      'groupField' => 'pollid',
- *      'valuesField' => 'response',
+ *      'columnsField' => 'subject',
+ *      'groupField' => 'student',
+ *      'valuesField' => 'grade',
  *      'pagination' => [
  *          'pagesize' => $pageSize // in case you want a default pagesize
  *      ]
@@ -58,10 +58,13 @@ use yii\db\QueryInterface;
  *
  * ```
  *
- * By default the transposed output contains on the the columns found at {@see columnsField },
- * to get other columns present on the query add them to {@see extraFields }
  *
- * Class Transpose2DataProvider
+ * <strong> TransposeDataProvider::$columnsField</strong> By default the transposed output contains only the the
+ * columns found at
+ * on the query.
+ *
+ * <strong>TransposeDataProvider::$extraFields</strong> to get other columns present on the query add them to
+ *
  *
  * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
  */
