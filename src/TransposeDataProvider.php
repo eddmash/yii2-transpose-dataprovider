@@ -100,6 +100,13 @@ class TransposeDataProvider extends ActiveDataProvider
     public $extraFields = [];
 
     /**
+     *  The column to be used to get the labels for the column, use this incase the field used for $columnsField does
+     * not consist of user friendly labels.
+     * @var
+     */
+    public $labelsField;
+
+    /**
      * cache for columns.
      *
      * @var
@@ -114,12 +121,6 @@ class TransposeDataProvider extends ActiveDataProvider
     private $_rows;
 
     /**
-     * Callback to invoked to customize each record found on the data field.
-     * @var
-     */
-    private $prepareDataFieldValue;
-
-    /**
      * Initializes the DB connection component.
      * This method will initialize the [[db]] property to make sure it refers to a valid DB connection.
      *
@@ -129,7 +130,7 @@ class TransposeDataProvider extends ActiveDataProvider
     {
         parent::init();
 
-        if (!is_array($this->extraFields)){
+        if (!is_array($this->extraFields)) {
             throw new InvalidParamException('The extraFields should be an array');
         }
     }
@@ -146,7 +147,7 @@ class TransposeDataProvider extends ActiveDataProvider
     protected function prepareModels()
     {
         if (!$this->query instanceof QueryInterface) {
-            throw new InvalidConfigException('The "query" property must be an instance of a class that'.
+            throw new InvalidConfigException('The "query" property must be an instance of a class that' .
                 ' implements the QueryInterface e.g. yii\db\Query or its subclasses.');
         }
 
@@ -231,13 +232,13 @@ class TransposeDataProvider extends ActiveDataProvider
     protected function prepareTotalCount()
     {
         if (!$this->query instanceof QueryInterface) {
-            throw new InvalidConfigException('The "query" property must be an instance of a class that implements the'.
+            throw new InvalidConfigException('The "query" property must be an instance of a class that implements the' .
                 ' QueryInterface e.g. yii\db\Query or its subclasses.');
         }
         /** @var $query ActiveQuery */
         $query = clone $this->query;
 
-        return (int) $query->select($this->groupField)->distinct()->orderBy($this->groupField)->count('*', $this->db);
+        return (int)$query->select($this->groupField)->distinct()->orderBy($this->groupField)->count('*', $this->db);
     }
 
     /**
@@ -248,9 +249,25 @@ class TransposeDataProvider extends ActiveDataProvider
      *
      * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
      */
-    public function getColsNames()
+    public function getDataColumns()
     {
-        return array_merge($this->getDistinctColumns(), $this->extraFields);
+        $columns = $this->getColumns();
+        if (count($columns) === 0):
+            return $columns;
+        endif;
+        return array_merge($columns, $this->extraFields);
+    }
+
+    protected function getColumns()
+    {
+        $colsMeta = $this->getDistinctColumns();
+
+        $colNames = [];
+        foreach ($colsMeta as $colMeta) :
+            $colNames[] = end($colMeta);
+        endforeach;
+
+        return $colNames;
     }
 
     /**
@@ -264,10 +281,10 @@ class TransposeDataProvider extends ActiveDataProvider
      *
      * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
      */
-    public function getDistinctRows()
+    protected function getDistinctRows()
     {
 
-        if($this->_rows):
+        if ($this->_rows):
             return $this->_rows;
         endif;
 
@@ -294,25 +311,56 @@ class TransposeDataProvider extends ActiveDataProvider
      *
      * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
      */
-    public function getDistinctColumns()
+    protected function getDistinctColumns()
     {
-        if($this->_columns):
+        if ($this->_columns):
             return $this->_columns;
         endif;
 
         /** @var $query ActiveQuery */
         $query = clone $this->query;
+        $query->distinct()->orderBy($this->columnsField)->asArray();
 
-        $rows = $query->select($this->columnsField)->distinct()->orderBy($this->columnsField)->asArray()->all($this->db);
 
-        array_walk($rows, function (&$value, $key) {
+        if ($this->labelsField):
+            $rows = $query->select([$this->columnsField, $this->labelsField])->all($this->db);
+            array_walk($rows, function (&$value, $key) {
+                $val = $this->getColumnValue($value, $this->stripRelation($this->columnsField));
 
-            $value = reset($value);
-        });
+                $label = $this->getColumnValue($value,$this->labelsField);
+
+                $value = [$val, self::conformColumn($label)];
+            });
+        else:
+            $rows = $query->select([$this->columnsField])->all($this->db);
+
+            array_walk($rows, function (&$value, $key) {
+                $val = $this->getColumnValue($value, $this->stripRelation($this->columnsField));
+                $value = [$val, $val];
+            });
+
+        endif;
 
         $this->_columns = $rows;
 
         return $this->_columns;
+    }
+
+    /**
+     * Strip the column name to the last in the relation e.g. user.role this returns role.
+     *
+     * @internal
+     * @param $column
+     * @return mixed
+     * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
+     */
+    private function stripRelation($column)
+    {
+        if($pos=strripos($column, '.')):
+
+            $column = substr($column, $pos+1);
+        endif;
+        return $column;
     }
 
     /**
@@ -329,36 +377,43 @@ class TransposeDataProvider extends ActiveDataProvider
      *
      * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
      */
-    private function transpose($models)
+    protected function transpose($models)
     {
-
         $dataRows = [];
 
         $columns = $this->getDistinctColumns();
         $extraColumns = $this->extraFields;
+
         foreach ($models as $index => $model) :
+
             if (is_array($this->groupField)):
-                $rowID = $model->{$this->groupField[0]}.''.$model->{$this->groupField[1]};
+                $rowID = $model->{$this->groupField[0]} . '' . $model->{$this->groupField[1]};
             else:
                 $rowID = $model->{$this->groupField};
             endif;
 
             foreach ($columns as $column) :
-                if($this->getColumnValue($model) !== $column):
+                $col = reset($column);
+
+                // get the value of the columnField in the model, if it matches the current column
+                // add it to our data rows
+                if ($this->getColumnValue($model, $this->columnsField) !== $col):
                     continue;
                 endif;
 
-                $dataRows[$rowID][$column] = $model->{$this->valuesField};
+                $dataRows[$rowID][end($column)] = $model->{$this->valuesField};
+
+                // add value of any other extra columns.that have been requested
+                foreach ($extraColumns as $eColumn => $label) :
+
+                    if (is_numeric($eColumn)):
+                        $eColumn = $label;
+                    endif;
+
+                    $dataRows[$rowID][$label] = $this->getColumnValue($model, $eColumn);
+                endforeach;
             endforeach;
 
-            foreach ($extraColumns as $eColumn => $label) :
-
-                if(is_numeric($eColumn)):
-                    $eColumn = $label;
-                endif;
-
-                $dataRows[$rowID][$label] = $this->getColumnValue($model, $eColumn);
-            endforeach;
 
         endforeach;
 
@@ -377,31 +432,29 @@ class TransposeDataProvider extends ActiveDataProvider
      *
      * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
      */
-    public function getColumnValue($model, $column = null)
+    protected function getColumnValue($model, $column = null)
     {
-        $column = ($column === null) ? $this->columnsField : $column;
-
         // handle relational columns
-        if(strpos($column, '.')):
-            $parentModel = $model->{substr($column, 0, strpos($column, '.'))};
+        if (strpos($column, '.')):
+            $parentModel = $model[substr($column, 0, strpos($column, '.'))];
             $childCol = substr($column, strpos($column, '.') + 1);
             $value = $this->getColumnValue($parentModel, $childCol);
         else:
-            $value = $model->{$column};
+            $value = $model[$column];
         endif;
 
         return $value;
     }
 
     /**
-     * Creates the field label. 
+     * Creates the field label.
      * @param $column
      * @return mixed
      * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
      */
-    public function getCleanColumn($column)
+    protected function getCleanColumn($column)
     {
-        if(!self::isValidVariableName($column)):
+        if (!self::isValidVariableName($column)):
             $column = self::conformColumn($column);
         endif;
         return $column;
@@ -413,12 +466,18 @@ class TransposeDataProvider extends ActiveDataProvider
      * @return mixed
      * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
      */
-    public static function isValidVariableName($name)
+    protected static function isValidVariableName($name)
     {
         return 1 === preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $name);
     }
 
-    public static function conformColumn($name)
+    /**
+     * ensures column to be a valid column name.
+     * @param $name
+     * @return mixed
+     * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
+     */
+    protected static function conformColumn($name)
     {
         return preg_replace('/[^\w]/', "_", $name);
     }
