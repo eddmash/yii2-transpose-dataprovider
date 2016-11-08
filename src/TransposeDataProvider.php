@@ -251,14 +251,19 @@ class TransposeDataProvider extends ActiveDataProvider
      */
     public function getDataColumns()
     {
-        $columns = $this->getColumns();
+        $columns = $this->getQueryColumns();
         if (count($columns) === 0):
             return $columns;
         endif;
         return array_merge($columns, $this->extraFields);
     }
 
-    protected function getColumns()
+    /**
+     * Returns columns found in the query.
+     * @return array
+     * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
+     */
+    protected function getQueryColumns()
     {
         $colsMeta = $this->getDistinctColumns();
 
@@ -268,6 +273,27 @@ class TransposeDataProvider extends ActiveDataProvider
         endforeach;
 
         return $colNames;
+    }
+
+    /**
+     * Get a column in the query based on a columnLabel provided.
+     * @param $columnLabel
+     * @return null
+     * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
+     */
+    public function getColumn($columnLabel)
+    {
+        $column = null;
+        $cols = $this->getDistinctColumns();
+        foreach ($cols as $col) :
+
+            if (in_array($columnLabel, $col)):
+                $column = reset($col);
+                break;
+            endif;
+        endforeach;
+
+        return $column;
     }
 
     /**
@@ -327,7 +353,7 @@ class TransposeDataProvider extends ActiveDataProvider
             array_walk($rows, function (&$value, $key) {
                 $val = $this->getColumnValue($value, $this->stripRelation($this->columnsField));
 
-                $label = $this->getColumnValue($value,$this->labelsField);
+                $label = $this->getColumnValue($value, $this->labelsField);
 
                 $value = [$val, self::conformColumn($label)];
             });
@@ -356,9 +382,9 @@ class TransposeDataProvider extends ActiveDataProvider
      */
     private function stripRelation($column)
     {
-        if($pos=strripos($column, '.')):
+        if ($pos = strripos($column, '.')):
 
-            $column = substr($column, $pos+1);
+            $column = substr($column, $pos + 1);
         endif;
         return $column;
     }
