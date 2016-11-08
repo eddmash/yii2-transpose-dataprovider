@@ -255,7 +255,7 @@ class TransposeDataProvider extends ActiveDataProvider
         if (count($columns) === 0):
             return $columns;
         endif;
-        return array_merge($columns, $this->extraFields);
+        return array_merge( $this->extraFields,$columns);
     }
 
     /**
