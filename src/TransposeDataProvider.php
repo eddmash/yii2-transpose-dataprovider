@@ -10,6 +10,7 @@ use yii\base\InvalidParamException;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
 use yii\db\ActiveQuery;
+use yii\db\Query;
 use yii\db\QueryInterface;
 
 /**
@@ -241,7 +242,9 @@ class TransposeDataProvider extends ActiveDataProvider
         /** @var $query ActiveQuery */
         $query = clone $this->query;
 
-        return (int)$query->select($this->groupField)->distinct()->orderBy($this->groupField)->count('*', $this->db);
+        return (int)$query->select($this->groupField)->distinct()
+            ->orderBy($this->groupField)
+            ->count('*', $this->db);
     }
 
     /**
@@ -320,7 +323,13 @@ class TransposeDataProvider extends ActiveDataProvider
         /** @var $query ActiveQuery */
         $query = clone $this->query;
 
-        $rows = $query->select($this->groupField)->distinct()->asArray()->orderBy($this->groupField)->all($this->db);
+        // avoid loading relations
+        $rows = $query->select($this->groupField)
+            ->distinct()
+            ->asArray()
+            ->orderBy($this->groupField)
+            ->createCommand($this->db)
+            ->queryAll();
 
         array_walk($rows, function (&$value, $key) {
             $value = $this->getCleanColumn(reset($value));
@@ -352,7 +361,8 @@ class TransposeDataProvider extends ActiveDataProvider
 
 
         if ($this->labelsField):
-            $rows = $query->select([$this->columnsField, $this->labelsField])->all($this->db);
+            // this will avoid populating the related fields
+            $rows = $query->select([$this->columnsField, $this->labelsField])->createCommand()->queryAll($this->db);
             array_walk($rows, function (&$value, $key) {
                 $val = $this->getColumnValue($value, $this->stripRelation($this->columnsField));
 
@@ -361,7 +371,8 @@ class TransposeDataProvider extends ActiveDataProvider
                 $value = [$val, self::conformColumn($label)];
             });
         else:
-            $rows = $query->select([$this->columnsField])->all($this->db);
+            // this will avoid populating the related fields
+            $rows = $query->select([$this->columnsField])->createCommand()->queryAll($this->db);
 
             array_walk($rows, function (&$value, $key) {
                 $val = $this->getColumnValue($value, $this->stripRelation($this->columnsField));
@@ -416,9 +427,9 @@ class TransposeDataProvider extends ActiveDataProvider
         foreach ($models as $index => $model) :
 
             if (is_array($this->groupField)):
-                $rowID = $model->{$this->groupField[0]} . '' . $model->{$this->groupField[1]};
+                $rowID = $model[$this->groupField[0]] . '' . $model[$this->groupField[1]];
             else:
-                $rowID = $model->{$this->groupField};
+                $rowID = $model[$this->groupField];
             endif;
 
             foreach ($columns as $column) :
@@ -430,7 +441,7 @@ class TransposeDataProvider extends ActiveDataProvider
                     continue;
                 endif;
 
-                $dataRows[$rowID][end($column)] = $model->{$this->valuesField};
+                $dataRows[$rowID][end($column)] = $model[$this->valuesField];
 
                 // add value of any other extra columns.that have been requested
                 foreach ($extraColumns as $eColumn => $label) :
