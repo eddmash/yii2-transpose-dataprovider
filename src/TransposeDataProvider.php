@@ -3,6 +3,7 @@
  * Created by Eddilbert Macharia (edd.cowan@gmail.com)<http://eddmash.com>
  * Date: 11/4/16.
  */
+
 namespace Eddmash\TransposeDataProvider;
 
 use yii\base\InvalidConfigException;
@@ -10,10 +11,13 @@ use yii\base\InvalidParamException;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
 use yii\db\ActiveQuery;
+use yii\db\ActiveQueryInterface;
 use yii\db\Query;
 use yii\db\QueryInterface;
 
 /**
+ * <h4>Transposing Query.</h4>
+ *
  * Transposes data returned by a query.
  *
  * Assuming you have a Query that outputs the following  :
@@ -60,17 +64,99 @@ use yii\db\QueryInterface;
  * ```
  *
  *
- * <strong> TransposeDataProvider::$columnsField</strong> By default the transposed output contains only the the
- * columns found at
- * on the query.
+ * By default <strong> TransposeDataProvider::$columnsField</strong> the transposed output contains only the
+ * columns found on the query.
  *
- * <strong>TransposeDataProvider::$extraFields</strong> to get other columns present on the query add them to
+ * To get other columns present on the query add them to the <strong>TransposeDataProvider::$extraFields</strong>.
  *
+ * <h4>Transposing EAV Data.</h4>
+ *
+ * The DataProvide also supports EAV setups, assuming we have the following setup.
+ *
+ *<pre>
+ *
+ *              Entity
+ * ------------------------------
+ * id   | name
+ * -----------------
+ *  1   | cre
+ *  2   | ghc
+ *  3   | physics
+ *  4   | cre
+ *  5   | ghc
+ *  6   | physics
+ *
+ *
+ *          Value
+ * -----------------------------
+ *
+ * entity_id | attribute_id | value
+ * ----------------------------------
+ *  1        | 1            | 52
+ *  2        | 2            | yes
+ *  3        | 3            | 100
+ *  4        | 4            | 70
+ *  5        | 5            | it all sucks
+ *  6        | 6            | 10
+ *
+ * Attribute
+ * ----------------------------------
+ *
+ * name         | attribute_id
+ * --------------------------
+ *  maganize    |    1
+ *  range       |    2
+ *  power       |    3
+ *  slogan      |    4
+ *  song        |    5
+ *  fire mode   |    6
+ *
+ *
+ * <pre>
+ *
+ * To Get the following output ::
+ * </pre>
+ *
+ * entity | magazine | range | power | slogan | song         | fire mode
+ * ------------------------------------------------------------------------
+ *   1    |   50     |  yes  | 100   | 70     | it all sucks | 10
+ *
+ * </pre>
+ *
+ *
+ * Transpose takes another parameter $columnQuery which should return the columns.
+ *
+ * ``` php
+ *
+ * use Eddmash\TransposeDataProvider
+ *
+ * $query = Value::find()->joinWith(['attribute attribute', 'attribute.entity entity'])->where(['entity.id'=>5]);
+ *
+ * $columnQuery = Attribute::find()->joinWith(['entity entity'])->where(['entity.id'=>5]);
+ *
+ * $dataProvider = new TransposeDataProvider([
+ *      'query' => $query,//
+ *      'columnsField' => 'attribute.name',
+ *      'groupField' => 'entity_id',
+ *      'valuesField' => 'value',
+ *      'columnsQuery' => $columnQuery,
+ *      'pagination' => [
+ *          'pagesize' => 10
+ *      ]
+ * ]);
+ *
+ * ```
  *
  * @author Eddilbert Macharia (http://eddmash.com) <edd.cowan@gmail.com>
  */
 class TransposeDataProvider extends ActiveDataProvider
 {
+    /**
+     * @var QueryInterface the query that is used to fetch data models and [[totalCount]]
+     * if it is not explicitly set.
+     */
+    public $query;
+
     /**
      * This fields is used group together records in the $this->query into actual understandable rows of records.
      * e.g. student in the example above.
@@ -81,6 +167,18 @@ class TransposeDataProvider extends ActiveDataProvider
 
     /**
      * The column in the columnQuery actually contains the records we need to use as column.
+     *
+     * This should be a string, it also accepts also a relationship separated by "dot notation" e.g user.name.
+     *
+     * NOTE :: this only accepts one level deep. so using the field user.role.permission will fail.
+     * This is to allow the use of columnsQuery.
+     *
+     * also note that if the columnsQuery is used, the $columnsField should be present in both
+     * the $query and the $columnQuery.
+     *
+     * in cases where the columnsField is a relationship e.g. "user.name" the data provider will look for the
+     * end of the relationship in this case "name" on the $columnsQuery
+     * and will look for the relation whole "user.name" in the data $query.
      *
      * @var
      */
@@ -126,6 +224,18 @@ class TransposeDataProvider extends ActiveDataProvider
     private $_rows;
 
     /**
+     * Query from which to get the columnsField. The Query should return atleast the columnsField, labelsField .
+     *
+     * This will come in handy incases where the dataQuery returns null, this will happend incases where we have
+     * columns in one table and the values for those columns in anothe table.
+     *
+     * in an Entity–attribute–value model(EAV) kind of set up.
+     *
+     * @var QueryInterface
+     */
+    public $columnsQuery;
+
+    /**
      * Initializes the DB connection component.
      * This method will initialize the [[db]] property to make sure it refers to a valid DB connection.
      *
@@ -138,6 +248,10 @@ class TransposeDataProvider extends ActiveDataProvider
         if (!is_array($this->extraFields)) {
             throw new InvalidParamException('The extraFields should be an array');
         }
+
+        if ($this->columnsQuery !== null && !$this->columnsQuery instanceof ActiveQueryInterface):
+            throw new InvalidParamException('The columnsQuery should be an instance if the "ActiveQueryInterface"');
+        endif;
     }
 
     /**
@@ -385,13 +499,18 @@ class TransposeDataProvider extends ActiveDataProvider
             return $this->_columns;
         endif;
 
-        /** @var $query ActiveQuery */
-        $query = clone $this->query;
-        $query->distinct()->orderBy($this->columnsField)->asArray();
+        /* @var $query ActiveQuery */
+        if ($this->columnsQuery instanceof ActiveQueryInterface):
+            $query = clone $this->columnsQuery;
+        else:
+            $query = clone $this->query;
+        endif;
+
+        $query->distinct()->orderBy($this->stripRelation($this->columnsField))->asArray();
 
         if ($this->labelsField):
             // this will avoid populating the related fields
-            $rows = $query->select([$this->columnsField, $this->labelsField])->createCommand()->queryAll($this->db);
+            $rows = $query->select([$this->stripRelation($this->columnsField), $this->labelsField])->createCommand()->queryAll($this->db);
             array_walk($rows, function (&$value, $key) {
                 $val = $this->getColumnValue($value, $this->stripRelation($this->columnsField));
 
@@ -401,7 +520,7 @@ class TransposeDataProvider extends ActiveDataProvider
             });
         else:
             // this will avoid populating the related fields
-            $rows = $query->select([$this->columnsField])->createCommand()->queryAll($this->db);
+            $rows = $query->select([$this->stripRelation($this->columnsField)])->createCommand()->queryAll($this->db);
 
             array_walk($rows, function (&$value, $key) {
                 $val = $this->getColumnValue($value, $this->stripRelation($this->columnsField));
