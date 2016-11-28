@@ -307,7 +307,7 @@ class TransposeDataProvider extends ActiveDataProvider
             $upperRange = $this->getUpperRow($pagination, $rows);
 
             if ($upperRange):
-                $query->where(['between', $this->groupField,
+                $query->andWhere(['between', $this->groupField,
                     $this->getLowerRow($pagination, $rows),
                     $upperRange,
                 ]);
