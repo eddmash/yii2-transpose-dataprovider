@@ -12,11 +12,10 @@ use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\db\ActiveQueryInterface;
-use yii\db\Query;
 use yii\db\QueryInterface;
 
 /**
- * <h4>Transposing Query.</h4>
+ * <h4>Transposing Query.</h4>.
  *
  * Transposes data returned by a query.
  *
@@ -153,7 +152,7 @@ class TransposeDataProvider extends ActiveDataProvider
 {
     /**
      * @var QueryInterface the query that is used to fetch data models and [[totalCount]]
-     * if it is not explicitly set.
+     *                     if it is not explicitly set
      */
     public $query;
 
@@ -297,7 +296,7 @@ class TransposeDataProvider extends ActiveDataProvider
 
         /** @var $query ActiveQuery */
         $query = clone $this->query;
-        $query->orderBy($this->groupField);
+        $query->addOrderBy($this->groupField);
 
         if (($pagination = $this->getPagination()) !== false) {
             $pagination->totalCount = $this->getTotalCount();
@@ -576,41 +575,56 @@ class TransposeDataProvider extends ActiveDataProvider
         $columns = $this->getDistinctColumns();
         $extraColumns = $this->extraFields;
 
-        foreach ($models as $index => $model) :
+        $columnCount = count($columns);
 
-            if (is_array($this->groupField)):
-                $rowID = $model[$this->groupField[0]].''.$model[$this->groupField[1]];
-            else:
-                $rowID = $model[$this->groupField];
-            endif;
+        foreach (array_chunk($models, $columnCount) as $index => $modelChunks) :
 
-            foreach ($columns as $column) :
-                $col = reset($column);
-
-                // get the value of the columnField in the model, if it matches the current column
-                // add it to our data rows
-                if ($this->getColumnValue($model, $this->columnsField) !== $col):
-                    continue;
+            foreach ($modelChunks as $model) :
+                if (is_array($this->groupField)):
+                    $rowID = $model[$this->groupField[0]].''.$model[$this->groupField[1]];
+                else:
+                    $rowID = $model[$this->groupField];
                 endif;
+                $rowID = $index.'_'.$rowID;
+                foreach ($columns as $column) :
+                    $col = reset($column);
 
-                $dataRows[$rowID][end($column)] = $model[$this->valuesField];
-
-                // add value of any other extra columns.that have been requested
-                foreach ($extraColumns as $eColumn => $label) :
-
-                    if (is_numeric($eColumn)):
-                        $eColumn = $label;
+                    // get the value of the columnField in the model, if it matches the current column
+                    // add it to our data rows
+                    if ($this->getColumnValue($model, $this->columnsField) !== $col):
+                        continue;
                     endif;
 
-                    $dataRows[$rowID][$label] = $this->getColumnValue($model, $eColumn);
+                    $column = end($column);
+
+                    $dataRows[$rowID][$column] = $model[$this->valuesField];
+
+                    // add value of any other extra columns.that have been requested
+                    foreach ($extraColumns as $eColumn => $label) :
+
+                        if (is_numeric($eColumn)):
+                            $eColumn = $label;
+                        endif;
+
+                        $dataRows[$rowID][$label] = $this->getColumnValue($model, $eColumn);
+                    endforeach;
+
                 endforeach;
             endforeach;
-
         endforeach;
 
         ksort($dataRows);
 
         return $dataRows;
+    }
+
+    public function getRowId($processedRows, $rowID)
+    {
+        if (array_key_exists($rowID, $processedRows)):
+
+        endif;
+
+        return $rowID;
     }
 
     /**
@@ -681,5 +695,14 @@ class TransposeDataProvider extends ActiveDataProvider
     protected static function conformColumn($name)
     {
         return preg_replace('/[^\w]/', '_', $name);
+    }
+
+    public function prepareRowID($rowID, $processedRows)
+    {
+        if (in_array($rowID, $processedRows)):
+            $rowID = sprintf('%s_%s', $rowID, 1);
+        endif;
+
+        return $rowID;
     }
 }
