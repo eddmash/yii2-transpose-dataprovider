@@ -163,6 +163,7 @@ class TransposeDataProvider extends ActiveDataProvider
      * @var
      */
     public $groupField;
+    public $specific;
 
     /**
      * The column in the columnQuery actually contains the records we need to use as column.
@@ -296,7 +297,12 @@ class TransposeDataProvider extends ActiveDataProvider
 
         /** @var $query ActiveQuery */
         $query = clone $this->query;
-        $query->addOrderBy($this->groupField);
+
+        $orgOrderBy = $query->orderBy;
+        $query->orderBy([$this->groupField => 'asc']);
+        if ($orgOrderBy):
+            $query->addOrderBy($orgOrderBy);
+        endif;
 
         if (($pagination = $this->getPagination()) !== false) {
             $pagination->totalCount = $this->getTotalCount();
@@ -577,15 +583,15 @@ class TransposeDataProvider extends ActiveDataProvider
 
         $columnCount = count($columns);
 
-        foreach (array_chunk($models, $columnCount) as $index => $modelChunks) :
+        foreach (array_chunk($models, $columnCount) as $modelChunks) :
 
             foreach ($modelChunks as $model) :
-                if (is_array($this->groupField)):
-                    $rowID = $model[$this->groupField[0]].''.$model[$this->groupField[1]];
+                if ($this->specific):
+                    $rowID = $this->getColumnValue($model, $this->specific).'_'.$model[$this->groupField];
                 else:
                     $rowID = $model[$this->groupField];
                 endif;
-                $rowID = $index.'_'.$rowID;
+
                 foreach ($columns as $column) :
                     $col = reset($column);
 
